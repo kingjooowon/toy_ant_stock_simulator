@@ -86,12 +86,17 @@ def buy_stock():
             print("X 숫자만 입력해주세요.")
             continue
         
-def run_game(charge):
+def run_game(charge, target_money):
     print(f"현재 수수료: {charge*100}%")
+    print(f"현재 target money: {target_money:,}원")
     out = False
     current_date = datetime.date(2026,2,21)
     
     while True:
+        if player["cash"] >= target_money:
+            print("\n승리하셨습니다!")
+            return
+        
         if (player["cash"] <= 0) and (portfolio == {}):
             print("\n파산하셨습니다.")
             return
@@ -117,19 +122,23 @@ def run_game(charge):
             
             if select == "매도":
                 sell_stock(charge)
-                print(f"현재 보유 현금: {int(player["cash"]):,}원")
+                print(f"현재 보유 현금: {int(player['cash']):,}원")
+                print(f"현재 target money: {target_money:,}원")
                 continue
             
             elif select == "매수":
                 buy_stock()
-                print(f"현재 보유 현금: {int(player["cash"]):,}원")
+                print(f"현재 보유 현금: {int(player['cash']):,}원")
+                print(f"현재 target money: {target_money:,}원")
                 continue
             
             elif select == "넘기기":
+                save_stock_log(current_date, player['cash'], portfolio, stocks)
                 break
             
             elif select == "게임 종료":
                 out = True
+                save_stock_log(current_date, player['cash'], portfolio, stocks)
                 break
             
             else:
@@ -154,19 +163,27 @@ def run_game(charge):
     
 if __name__ == "__main__":
     charge = 0
+    target_money = 0
     
     while True:
         difficulty = input("\n난이도를 선택하세요 (easy / normal / hard): ")
         if difficulty == "easy":
-            charge = 0.02
+            charge = 0.001
+            target_money = 150000000
             break
         elif difficulty == "normal":
-            charge = 0.05
+            charge = 0.01
+            target_money = 200000000
             break
         elif difficulty == "hard":
-            charge = 0.1
+            charge = 0.03
+            target_money = 250000000
             break
         else:
             print("Invalid Input!")
             
-    run_game(charge)
+    print("=== 규칙 설명 ===")
+    print("\n승리조건: 보유 '현금'이 target_money를 넘으면 승리")
+    print("패배조건: 파산\n")
+    
+    run_game(charge, target_money)

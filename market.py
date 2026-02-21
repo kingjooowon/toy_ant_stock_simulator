@@ -1,16 +1,16 @@
 import random
 
 stocks = {
-    "SK하이닉스": {"price": 943000, "volatility": 0.055},
-    "삼성전자": {"price": 190300, "volatility": 0.015},
-    "두산에너빌리티": {"price": 103900, "volatility": 0.056},
-    "한화오션": {"price": 149000, "volatility": 0.060},
-    "SK이터닉스": {"price": 29950, "volatility": 0.055},
-    "삼현": {"price": 53200, "volatility": 0.014},
-    "삼성SDI": {"price": 402500, "volatility": 0.013},
-    "S-OIL": {"price": 120600, "volatility": 0.087},
-    "부국증권": {"price": 101300, "volatility": 0.201},
-    "한화시스템": {"price": 116000, "volatility": 0.090}
+    "SK하이닉스": {"price": 943000, "volatility": 0.085},
+    "삼성전자": {"price": 190300, "volatility": 0.045},
+    "두산에너빌리티": {"price": 103900, "volatility": 0.086},
+    "한화오션": {"price": 149000, "volatility": 0.090},
+    "SK이터닉스": {"price": 29950, "volatility": 0.085},
+    "삼현": {"price": 53200, "volatility": 0.044},
+    "삼성SDI": {"price": 402500, "volatility": 0.043},
+    "S-OIL": {"price": 120600, "volatility": 0.117},
+    "부국증권": {"price": 101300, "volatility": 0.231},
+    "한화시스템": {"price": 116000, "volatility": 0.120}
 }
 
 news_data = {
