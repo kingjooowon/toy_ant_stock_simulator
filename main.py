@@ -86,6 +86,25 @@ def buy_stock():
             print("X 숫자만 입력해주세요.")
             continue
         
+def auto_trade(stocks, portfolio, cash, name, line):
+    if stocks[name]["price"] <= line and cash > 0:
+        print(f"[AUTO] {name} 저가 매수 타이밍! 매수를 진행합니다.")
+        
+        price = stocks[name]["price"]
+        qty = int(cash / 2) / int(price)
+        total_price = price * qty
+        
+        if name in portfolio:
+            new_avg = int(((portfolio[name]["avg_price"] * portfolio[name]["quantity"]) + (price * qty)) / (portfolio[name]["quantity"] + qty))
+            portfolio[name]["avg_price"] = new_avg
+            portfolio[name]["quantity"] += qty
+            print(f"\n{name} {qty}주 매수 완료! (-{total_price:,}원)")
+        
+        else:
+            portfolio[name] = {"quantity": qty, "avg_price": price}
+            print(f"\n{name} {qty}주 매수 완료! (-{total_price:,}원)")
+            
+        
 def run_game(charge, target_money):
     print(f"현재 수수료: {charge*100}%")
     print(f"현재 target money: {target_money:,}원")
@@ -118,7 +137,7 @@ def run_game(charge, target_money):
             show_earnings_rate(portfolio, stocks)
             
         while True:
-            select = input("=== 매도 / 매수 / 넘기기 / 게임 종료 === 중 택1: ").strip()
+            select = input("=== 매도 / 매수 / 넘기기 / 자동매수설정 / 게임 종료 === 중 택1: ").strip()
             
             if select == "매도":
                 sell_stock(charge)
@@ -135,6 +154,26 @@ def run_game(charge, target_money):
             elif select == "넘기기":
                 save_stock_log(current_date, player['cash'], portfolio, stocks)
                 break
+            
+            elif select == "자동매수설정":
+                while True:
+                    try:
+                        at_name = input("\n자동매수를 설정할 종목의 이름을 입력해주세요: ")
+                        if at_name not in stocks:
+                            raise ValueError
+                        
+                        line = int(input("조건 가격을 설정해주세요(0 < line <= cash): "))
+                        if (line <= 0) or (line > player['cash']):
+                            raise ValueError
+
+                        auto_trade(stocks, portfolio, player['cash'], at_name, line)
+                        print(f"\n{at_name}종목의 자동 매수 설정이 완료되었습니다.")
+                        break
+                    
+                    except ValueError:
+                        print("Invalid input!")
+                        
+                    continue   
             
             elif select == "게임 종료":
                 out = True
